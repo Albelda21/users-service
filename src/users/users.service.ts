@@ -13,15 +13,12 @@ export class UsersService {
     private readonly publisher: RabbitPublisher,
     private readonly logger: Logger,
   ) {}
+
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const { username } = createUserDto;
-
     try {
-      const user = await this.usersRepository.create(username);
+      const user = await this.usersRepository.create(createUserDto.username);
       await this.publisher.publish(USER_CREATED_ROUTING_KEY, user);
-
       this.logger.debug('User created successfully.', user);
-
       return user;
     } catch (error) {
       this.logger.error(error);
