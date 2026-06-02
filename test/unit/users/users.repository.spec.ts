@@ -49,7 +49,9 @@ describe('UsersRepository', () => {
       repository.create.mockReturnValue(mockUser);
       repository.save.mockRejectedValue(error);
 
-      await expect(usersRepository.create('testuser')).rejects.toThrow('DB error');
+      await expect(usersRepository.create('testuser')).rejects.toThrow(
+        'DB error',
+      );
     });
   });
 });

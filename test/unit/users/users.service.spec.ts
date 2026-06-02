@@ -54,7 +54,10 @@ describe('UsersService', () => {
 
       expect(usersRepository.create).toHaveBeenCalledWith('testuser');
       expect(publisher.publish).toHaveBeenCalledWith('user.created', mockUser);
-      expect(logger.debug).toHaveBeenCalledWith('User created successfully.', mockUser);
+      expect(logger.debug).toHaveBeenCalledWith(
+        'User created successfully.',
+        mockUser,
+      );
       expect(result).toEqual(mockUser);
     });
 
