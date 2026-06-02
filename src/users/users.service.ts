@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersRepository } from './users.repository';
 import { RabbitPublisher } from '../publishers/providers/rabbit.publisher';
@@ -17,6 +17,11 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const user = await this.usersRepository.create(createUserDto.username);
+
+      if (!user) {
+        throw new HttpException('User already exists', HttpStatus.NOT_FOUND);
+      }
+
       await this.publisher.publish(USER_CREATED_ROUTING_KEY, user);
       this.logger.debug('User created successfully.', user);
       return user;
